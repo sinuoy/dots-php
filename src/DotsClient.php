@@ -5,14 +5,13 @@ namespace Dots;
 use Dots\Exception\ApiException;
 use Dots\Service\AbstractServiceFactory;
 use Dots\Service\ServiceFactory;
-use Dots\Util\Util;
 use GuzzleHttp\Client as GuzzleClient;
-use Dots\Services\UsersService;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 
 /**
- * @property Resource $users
+ * @property Service\UsersService $users
+ * @property Service\FlowsService $flows
  */
 class DotsClient implements DotsClientInterface {
     protected string $clientId;
@@ -45,19 +44,28 @@ class DotsClient implements DotsClientInterface {
      * @throws GuzzleException
      * @throws ApiException
      */
-    public function request(string $method, string $path, array $data = []): array {
+    public function request(string $method, string $path, array $data = []): ?array {
         $client = new GuzzleClient();
 
         $data = $this->convertDotNotationToArray($data);
 
         try {
-            $jsonResponse = $client->request($method, $this->apiUrl . $path, [
+            $request = [
                 'headers' => [
                     'Authorization' => 'Basic ' . $this->generateToken(),
                     'Content-Type'  => 'application/json',
                 ],
-                'json' => $data,
-            ]);
+            ];
+
+            if (!empty($data)) {
+                $request['json'] = $data;
+            }
+
+            $jsonResponse = $client->request($method, $this->apiUrl . $path, $request);
+
+            dd($jsonResponse->getBody()->getContents());
+
+            if(empty($jsonResponse->getBody()->getContents())) return array();
 
             return json_decode($jsonResponse->getBody()->getContents(), true);
         } catch (ClientException $e) {

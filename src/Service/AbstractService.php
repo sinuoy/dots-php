@@ -19,7 +19,7 @@ abstract class AbstractService
         return $this->client;
     }
 
-    protected function request($method, $path, $data): array
+    protected function request($method, $path, $data = []): ?array
     {
         return $this->getClient()->request($method, $path, $data);
     }

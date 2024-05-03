@@ -2,13 +2,17 @@
 
 namespace Dots\Service;
 
+use Dots\Flow;
+use Dots\User;
+
 class ServiceFactory extends AbstractServiceFactory
 {
     /**
      * @var array<string, string>
      */
     private static array $classMap = [
-        'users' => UsersService::class,
+        User::SERVICE => UsersService::class,
+        Flow::SERVICE => FlowsService::class,
     ];
 
     protected function getServiceClass($name): ?string

@@ -35,9 +35,19 @@ class UsersService  extends AbstractService {
         return $collection;
     }
 
-    public function addComplianceInformation($userId, array $data): DotsObject
+    public function addComplianceInformation($userId, array $data): void
     {
-        return $this->fromArray($this->request('PUT', sprintf("%s/%s/compliance", Environment::makePath('users'), $userId), $data));
+        $this->request('PUT', Environment::makePath(sprintf("users/%s/compliance", $userId)), $data);
+    }
+
+    public function sendVerificationCode($userId): void
+    {
+        $this->request('POST', Environment::makePath(sprintf("users/%s/send-verification-token", $userId)));
+    }
+
+    public function verifyCode($userId, $data): void
+    {
+        $this->request('POST', Environment::makePath(sprintf("users/%s/verify", $userId)), $data);
     }
 
     /**
