@@ -10,6 +10,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 
 /**
+ * @property Service\PayoutMethodsService $payoutMethods
  * @property Service\UsersService $users
  * @property Service\FlowsService $flows
  */
@@ -63,14 +64,23 @@ class DotsClient implements DotsClientInterface {
 
             $jsonResponse = $client->request($method, $this->apiUrl . $path, $request);
 
-            dd($jsonResponse->getBody()->getContents());
 
-            if(empty($jsonResponse->getBody()->getContents())) return array();
 
-            return json_decode($jsonResponse->getBody()->getContents(), true);
+            dd($jsonResponse); // (1
+
+            $content = $jsonResponse->getBody()->getContents();
+
+            if(empty($content)) return array();
+
+            $decodedContent = json_decode($content, true);
+
+            return $decodedContent;
         } catch (ClientException $e) {
+            dd($e); // (2
             $responseBody = json_decode($e->getResponse()->getBody()->getContents(), true);
             throw new ApiException($responseBody['message'], $e->getResponse()->getStatusCode());
+        } catch (\Exception $e) {
+            dd($e);
         }
     }
 

@@ -19,6 +19,11 @@ class UsersService  extends AbstractService {
         return $this->fromArray($this->request('POST', Environment::makePath('users'), $data));
     }
 
+    public function update(string $userId, array $data): DotsObject
+    {
+        return $this->fromArray($this->request('PATCH', sprintf("%s/%s", Environment::makePath('users'), $userId), $data));
+    }
+
     public function all(array $params = []): DotsObject
     {
         $response = $this->request('GET', Environment::makePath('users'), $params);

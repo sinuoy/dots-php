@@ -7,17 +7,15 @@ use Dots\Api\Create;
 use Dots\Api\Retrieve;
 use Dots\Exception\InvalidMethodException;
 
-class User extends DotsObject {
-    const SERVICE = 'users';
+class PayoutMethod extends DotsObject {
+    const SERVICE = 'payoutMethods';
 
-    public ?string $id;
+    public ?string $platform;
+    public ?string $routing_number;
+    public ?string $account_number;
+    public ?string $account_type;
     public ?string $email;
-    public ?string $first_name;
-    public ?string $last_name;
-    public ?PhoneNumber $phone_number;
-    public ?array $wallet;
-    public ?array $metadata;
-    public bool $verified = false;
+    public ?string $phone_number;
 
     use Create;
     use Retrieve;
@@ -45,16 +43,14 @@ class User extends DotsObject {
      */
     public static function fromArray(array $array): DotsObject
     {
-        $user = new User();
-        $user->id = $array['id'] ?? null;
-        $user->email = $array['email'] ?? null;
-        $user->first_name = $array['first_name'] ?? null;
-        $user->last_name = $array['last_name'] ?? null;
-        $user->phone_number = isset($array['phone_number']) ? PhoneNumber::fromArray($array['phone_number']) : null;
-        $user->wallet = $array['wallet'] ?? null;
-        $user->metadata = $array['metadata'] ?? null;
-        $user->verified = !empty($array['status']) && $array['status'] === 'verified';
+        $payoutMethod = new PayoutMethod();
+        $payoutMethod->platform = $array['platform'] ?? null;
+        $payoutMethod->routing_number = $array['routing_number'] ?? null;
+        $payoutMethod->account_number = $array['account_number'] ?? null;
+        $payoutMethod->account_type = $array['account_type'] ?? null;
+        $payoutMethod->email = $array['email'] ?? null;
+        $payoutMethod->phone_number = $array['phone_number'] ?? null;
 
-        return $user;
+        return $payoutMethod;
     }
 }

@@ -3,6 +3,7 @@
 namespace Dots\Service;
 
 use Dots\Flow;
+use Dots\PayoutMethod;
 use Dots\User;
 
 class ServiceFactory extends AbstractServiceFactory
@@ -13,6 +14,7 @@ class ServiceFactory extends AbstractServiceFactory
     private static array $classMap = [
         User::SERVICE => UsersService::class,
         Flow::SERVICE => FlowsService::class,
+        PayoutMethod::SERVICE => PayoutMethodsService::class,
     ];
 
     protected function getServiceClass($name): ?string
